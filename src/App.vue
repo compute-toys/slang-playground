@@ -17,6 +17,7 @@ import 'splitpanes/dist/splitpanes.css'
 import ReflectionView from './components/ReflectionView.vue'
 import Colorpick from './components/ui/Colorpick.vue'
 import { useWindowSize } from '@vueuse/core'
+import ShaderConverter from './glue'
 
 // MonacoEditor is a big component, so we load it asynchronously.
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
@@ -372,7 +373,11 @@ function compileShader(userSource: string, entryPoint: string, compileTarget: ty
     let [compiledCode, layout, hashedStrings, reflectionJsonObj, threadGroupSize] = compiledResult;
     reflectionJson = reflectionJsonObj;
 
-    codeGenArea.value?.setEditorValue(compiledCode);
+    const converter = new ShaderConverter();
+    let convertedCode = converter.convert(reflectionJson);
+    convertedCode += compiledCode.split('\n').filter(line => !line.trim().startsWith('@binding')).join('\n');
+
+    codeGenArea.value?.setEditorValue(convertedCode);
     codeGenArea.value?.setLanguage(targetLanguageMap[compileTarget]);
 
     // Update reflection info.
