@@ -106,8 +106,11 @@ jobs:
           rm -rf slang-repo
           rm -rf emsdk
           rm -rf spirv-tools
-          mv ./slang-wasm.wasm.gz ./slang-wasm.js ./slang-wasm.d.ts ./src/
-          mv ./spirv-tools.wasm ./spirv-tools.js ./spirv-tools.d.ts ./src/
+          cp ./slang-wasm.wasm.gz ./slang-wasm.js ./slang-wasm.d.ts ./src/
+          cp ./spirv-tools.wasm ./spirv-tools.js ./spirv-tools.d.ts ./src/
+          mkdir -p ./public/wasm
+          cp ./slang-wasm.wasm.gz ./slang-wasm.js ./slang-wasm.d.ts ./public/wasm/
+          cp ./spirv-tools.wasm ./spirv-tools.js ./spirv-tools.d.ts ./public/wasm/
           npm install
           npm run build
 
